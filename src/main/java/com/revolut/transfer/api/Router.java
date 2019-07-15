@@ -2,6 +2,7 @@ package com.revolut.transfer.api;
 
 import static spark.Spark.before;
 import static spark.Spark.post;
+import static spark.Spark.put;
 
 import com.google.inject.Inject;
 
@@ -15,6 +16,6 @@ public class Router {
 
     public void handleRequests() {
         before("/transfer", filter::validateRequest);
-        post("/transfer", controller::processTransferRequest);
+        put("/transfer", controller::processTransferRequest);
     }
 }
