@@ -6,18 +6,18 @@ Payload:
 <pre>
   Schema
   { 
-    senderId: BigInteger that is non-negative and not the same as receiver id
-    receiverId: BigInteger that is non-negative and not the same as sender id
-    amountId: BigDecimal that is greater than zero
+    senderID: BigInteger that is non-negative and not the same as receiver id
+    receiverID: BigInteger that is non-negative and not the same as sender id
+    amount: BigDecimal that is greater than zero
   }
   
   Will return 400 status if schema is violated
   
   Example
   {
-    senderId: 1,
-    receiverId: 2,
-    amountId: 50
+    senderID: 1,
+    receiverID: 2,
+    amount: 50
   }
   
   
