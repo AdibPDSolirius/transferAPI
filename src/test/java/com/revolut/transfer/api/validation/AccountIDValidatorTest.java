@@ -50,4 +50,18 @@ public class AccountIDValidatorTest {
         boolean isPass = accountIDValidator.validate(transferDTO);
         assertFalse(isPass);
     }
+
+    @Test
+    public void shouldReturnTrueWhenSenderIsNotReceiver() {
+        TransferDTO transferDTO = new TransferDTO(BigDecimal.TEN, BigInteger.ZERO, BigInteger.ONE);
+        boolean isPass = accountIDValidator.validate(transferDTO);
+        assertTrue(isPass);
+    }
+
+    @Test
+    public void shouldReturnFalseWhenSenderIsReceiver() {
+        TransferDTO transferDTO = new TransferDTO(BigDecimal.TEN, BigInteger.ZERO, BigInteger.ZERO);
+        boolean isPass = accountIDValidator.validate(transferDTO);
+        assertFalse(isPass);
+    }
 }

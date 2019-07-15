@@ -4,7 +4,6 @@ import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.Multibinder;
 import com.revolut.transfer.api.validation.AccountIDValidator;
 import com.revolut.transfer.api.validation.AmountValidator;
-import com.revolut.transfer.api.validation.SenderReceiverValidator;
 import com.revolut.transfer.api.validation.TransferValidator;
 
 public class FilterModule extends AbstractModule {
@@ -15,6 +14,5 @@ public class FilterModule extends AbstractModule {
                 Multibinder.newSetBinder(binder(), TransferValidator.class);
         transferValidatorMultibinder.addBinding().to(AccountIDValidator.class);
         transferValidatorMultibinder.addBinding().to(AmountValidator.class);
-        transferValidatorMultibinder.addBinding().to(SenderReceiverValidator.class);
     }
 }
