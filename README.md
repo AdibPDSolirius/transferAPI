@@ -40,11 +40,11 @@ Response:
 Database initialised with two accounts
 <pre>
   Account A: 
-    ID: 1
+    ID: 0
     Balance: 100
    
   Account B:
-    ID: 2
+    ID: 1
     Balance: 100
 </pre>
 
