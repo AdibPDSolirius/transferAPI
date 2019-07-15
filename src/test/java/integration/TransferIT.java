@@ -132,7 +132,7 @@ public class TransferIT {
     }
 
     @Test
-    public void shouldReturn422SenderAccountNotInDatabaseAndMoneyNotTransferredWhenSenderAccountNotInDatabase() {
+    public void shouldReturn422SenderAccountNotFoundAndMoneyNotTransferredWhenSenderAccountNotInDatabase() {
         final String fakeSenderId = SENDER_ID + "1";
 
         given().
@@ -152,7 +152,7 @@ public class TransferIT {
     }
 
     @Test
-    public void shouldReturn422ReceiverAccountNotInDatabaseAndMoneyNotTransferredWhenReceiverAccountNotInDatabase() {
+    public void shouldReturn422ReceiverAccountNotFoundAndMoneyNotTransferredWhenReceiverAccountNotInDatabase() {
         final String fakeReceiverId = RECEIVER_ID + "1";
 
         given().

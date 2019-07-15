@@ -40,7 +40,7 @@ public class AccountBalanceServiceTest {
     private static final TransferDTO TRANSFER_DTO = new TransferDTO(AMOUNT_IN_ACCOUNT, SENDER_ID, RECEIVER_ID);
 
     @Test
-    public void shouldReturnSenderAccountNotInDatabaseResponseWhenSenderAccountIsNull() {
+    public void shouldReturnSenderAccountNotFoundResponseWhenSenderAccountIsNull() {
         when(transferRepository.findAccountBalanceByID(SENDER_ID)).thenReturn(null);
 
         final ResponseParameters responseParameters = transferService.transfer(TRANSFER_DTO);
@@ -52,7 +52,7 @@ public class AccountBalanceServiceTest {
     }
 
     @Test
-    public void shouldReturnReceiverAccountNotInDatabaseResponseWhenReceiverAccountIsNull() {
+    public void shouldReturnReceiverAccountNotFoundResponseWhenReceiverAccountIsNull() {
         when(transferRepository.findAccountBalanceByID(RECEIVER_ID)).thenReturn(null);
         when(transferRepository.findAccountBalanceByID(SENDER_ID)).thenReturn(accountBalance);
 
