@@ -24,10 +24,10 @@ import spark.Request;
 import spark.Response;
 
 @RunWith(MockitoJUnitRunner.class)
-public class HandlerTest {
+public class ControllerTest {
 
     @InjectMocks
-    private Handler handler;
+    private Controller controller;
 
     @Mock
     private AccountBalanceService accountBalanceService;
@@ -47,7 +47,7 @@ public class HandlerTest {
         when(accountBalanceService.transfer(any(TransferDTO.class))).thenReturn(mockResponseParameters);
         when(request.body()).thenReturn(getMockTransferPayload());
 
-        final String responseJSON = handler.processTransferRequest(request, response);
+        final String responseJSON = controller.processTransferRequest(request, response);
 
         assertEquals(new Gson().toJson(mockResponseParameters.getResponseDTO()), responseJSON);
 

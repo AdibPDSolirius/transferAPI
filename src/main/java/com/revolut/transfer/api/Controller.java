@@ -10,7 +10,7 @@ import spark.Request;
 import spark.Response;
 
 
-public class Handler {
+public class Controller {
 
     @Inject
     private AccountBalanceService accountBalanceService;
@@ -22,7 +22,7 @@ public class Handler {
 
     private Gson gson;
 
-    public Handler() {
+    public Controller() {
         gson = new Gson();
 
     }

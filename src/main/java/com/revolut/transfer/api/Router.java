@@ -11,10 +11,10 @@ public class Router {
     private Filter filter;
 
     @Inject
-    private Handler handler;
+    private Controller controller;
 
     public void handleRequests() {
         before("/transfer", filter::validateRequest);
-        post("/transfer", handler::processTransferRequest);
+        post("/transfer", controller::processTransferRequest);
     }
 }
