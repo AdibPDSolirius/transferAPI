@@ -14,12 +14,14 @@ import org.junit.runner.RunWith;
 @RunWith(JUnit4ClassRunner.class)
 public class AccountBalanceTest {
 
+    private static final BigDecimal AMOUNT_IN_SENDER_ACCOUNT = BigDecimal.TEN;
+
     @Test
     public void shouldReturnTrueAndMoneyIsTransferredWhenSenderHasEnoughMoney() {
-        final AccountBalance sender = new AccountBalance(BigInteger.ZERO, BigDecimal.TEN);
+        final AccountBalance sender = new AccountBalance(BigInteger.ZERO, AMOUNT_IN_SENDER_ACCOUNT);
         final AccountBalance receiver = new AccountBalance(BigInteger.ZERO, BigDecimal.ZERO);
 
-        final boolean isSuccessful = sender.transferTo(receiver, BigDecimal.TEN);
+        final boolean isSuccessful = sender.transferTo(receiver, AMOUNT_IN_SENDER_ACCOUNT);
 
         assertTrue(isSuccessful);
 
@@ -29,10 +31,10 @@ public class AccountBalanceTest {
 
     @Test
     public void shouldReturnFalseAndMoneyNotTransferredWhenSenderHasNotEnoughMoney() {
-        final AccountBalance sender = new AccountBalance(BigInteger.ZERO, BigDecimal.TEN);
+        final AccountBalance sender = new AccountBalance(BigInteger.ZERO, AMOUNT_IN_SENDER_ACCOUNT);
         final AccountBalance receiver = new AccountBalance(BigInteger.ZERO, BigDecimal.ZERO);
 
-        final boolean isSuccessful = sender.transferTo(receiver, BigDecimal.valueOf(10.5));
+        final boolean isSuccessful = sender.transferTo(receiver, AMOUNT_IN_SENDER_ACCOUNT.add(BigDecimal.ONE));
 
         assertFalse(isSuccessful);
 

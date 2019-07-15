@@ -7,7 +7,7 @@ import com.google.inject.Inject;
 public class ThreadHandler{
 
     @Inject
-    AccountLocks accountLocks;
+    private AccountLocks accountLocks;
 
     public void manageThreads(final BigInteger accountID1, final BigInteger accountID2, final Runnable runnable) {
         final BigInteger lockFirst = accountID1.compareTo(accountID2) < 0 ? accountID1 : accountID2;
