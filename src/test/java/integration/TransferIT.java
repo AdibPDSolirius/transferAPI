@@ -2,8 +2,8 @@ package integration;
 
 import static com.revolut.transfer.Application.PORT;
 import static com.revolut.transfer.api.response.ResponseMessage.INSUFFICIENT_FUNDS;
-import static com.revolut.transfer.api.response.ResponseMessage.RECEIVER_ACCOUNT_NOT_IN_DATABASE;
-import static com.revolut.transfer.api.response.ResponseMessage.SENDER_ACCOUNT_NOT_IN_DATABASE;
+import static com.revolut.transfer.api.response.ResponseMessage.RECEIVER_ACCOUNT_NOT_FOUND;
+import static com.revolut.transfer.api.response.ResponseMessage.SENDER_ACCOUNT_NOT_FOUND;
 import static com.revolut.transfer.api.response.ResponseMessage.TRANSFER_SUCCESSFUL;
 import static com.revolut.transfer.api.response.ResponseStatus.FAILURE;
 import static com.revolut.transfer.api.response.ResponseStatus.SUCCESS;
@@ -21,10 +21,10 @@ import java.math.BigInteger;
 import com.google.gson.JsonObject;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.revolut.transfer.infrastructure.HandlerModule;
 import com.revolut.transfer.api.Router;
 import com.revolut.transfer.data.AccountBalanceRepository;
 import com.revolut.transfer.domain.AccountBalance;
+import com.revolut.transfer.infrastructure.HandlerModule;
 import org.eclipse.jetty.http.HttpStatus;
 import org.junit.After;
 import org.junit.Before;
@@ -146,7 +146,7 @@ public class TransferIT {
                 .contentType(APPLICATION_JSON)
                 .body(STATUS_FIELD, equalTo(FAILURE.getResponseStatus()))
                 .and()
-                .body(MESSAGE_FIELD, equalTo(SENDER_ACCOUNT_NOT_IN_DATABASE.getResponseMessage()));
+                .body(MESSAGE_FIELD, equalTo(SENDER_ACCOUNT_NOT_FOUND.getResponseMessage()));
 
         assertNoBalanceChange();
     }
@@ -166,7 +166,7 @@ public class TransferIT {
                 .contentType(APPLICATION_JSON)
                 .body(STATUS_FIELD, equalTo(FAILURE.getResponseStatus()))
                 .and()
-                .body(MESSAGE_FIELD, equalTo(RECEIVER_ACCOUNT_NOT_IN_DATABASE.getResponseMessage()));
+                .body(MESSAGE_FIELD, equalTo(RECEIVER_ACCOUNT_NOT_FOUND.getResponseMessage()));
 
         assertNoBalanceChange();
     }

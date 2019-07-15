@@ -2,8 +2,8 @@ package com.revolut.transfer.application;
 
 import com.google.inject.Inject;
 import com.revolut.transfer.api.request.TransferDTO;
-import com.revolut.transfer.api.response.ResponseMessage;
 import com.revolut.transfer.api.response.ResponseDTO;
+import com.revolut.transfer.api.response.ResponseMessage;
 import com.revolut.transfer.api.response.ResponseParameters;
 import com.revolut.transfer.api.response.ResponseStatus;
 import com.revolut.transfer.data.AccountBalanceRepository;
@@ -21,13 +21,13 @@ public class AccountBalanceService {
         final AccountBalance sender = accountBalanceRepository.findAccountBalanceByID(transferDTO.getSenderID());
         if(sender == null) {
             return new ResponseParameters(HttpStatus.UNPROCESSABLE_ENTITY_422,
-                    new ResponseDTO(ResponseStatus.FAILURE, ResponseMessage.SENDER_ACCOUNT_NOT_IN_DATABASE));
+                    new ResponseDTO(ResponseStatus.FAILURE, ResponseMessage.SENDER_ACCOUNT_NOT_FOUND));
         }
 
         final AccountBalance receiver = accountBalanceRepository.findAccountBalanceByID(transferDTO.getReceiverID());
         if(receiver == null) {
             return new ResponseParameters(HttpStatus.UNPROCESSABLE_ENTITY_422,
-                    new ResponseDTO(ResponseStatus.FAILURE, ResponseMessage.RECEIVER_ACCOUNT_NOT_IN_DATABASE));
+                    new ResponseDTO(ResponseStatus.FAILURE, ResponseMessage.RECEIVER_ACCOUNT_NOT_FOUND));
         }
 
         final boolean isSuccess = sender.transferTo(receiver, transferDTO.getAmount());

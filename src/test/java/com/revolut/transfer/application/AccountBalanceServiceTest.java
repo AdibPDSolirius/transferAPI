@@ -10,7 +10,6 @@ import com.revolut.transfer.api.request.TransferDTO;
 import com.revolut.transfer.api.response.ResponseMessage;
 import com.revolut.transfer.api.response.ResponseParameters;
 import com.revolut.transfer.api.response.ResponseStatus;
-import com.revolut.transfer.application.AccountBalanceService;
 import com.revolut.transfer.data.AccountBalanceRepository;
 import com.revolut.transfer.domain.AccountBalance;
 import org.eclipse.jetty.http.HttpStatus;
@@ -47,7 +46,7 @@ public class AccountBalanceServiceTest {
 
         assertEquals(HttpStatus.UNPROCESSABLE_ENTITY_422, responseParameters.getHttpStatus());
         assertEquals(ResponseStatus.FAILURE.getResponseStatus(), responseParameters.getResponseDTO().getStatus());
-        assertEquals(ResponseMessage.SENDER_ACCOUNT_NOT_IN_DATABASE.getResponseMessage(), responseParameters.getResponseDTO().getMessage());
+        assertEquals(ResponseMessage.SENDER_ACCOUNT_NOT_FOUND.getResponseMessage(), responseParameters.getResponseDTO().getMessage());
 
     }
 
@@ -60,7 +59,7 @@ public class AccountBalanceServiceTest {
 
         assertEquals(HttpStatus.UNPROCESSABLE_ENTITY_422, responseParameters.getHttpStatus());
         assertEquals(ResponseStatus.FAILURE.getResponseStatus(), responseParameters.getResponseDTO().getStatus());
-        assertEquals(ResponseMessage.RECEIVER_ACCOUNT_NOT_IN_DATABASE.getResponseMessage(), responseParameters.getResponseDTO().getMessage());
+        assertEquals(ResponseMessage.RECEIVER_ACCOUNT_NOT_FOUND.getResponseMessage(), responseParameters.getResponseDTO().getMessage());
 
     }
 
