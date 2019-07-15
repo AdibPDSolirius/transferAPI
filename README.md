@@ -6,8 +6,8 @@ Payload:
 <pre>
   Schema
   { 
-    senderID: BigInteger that is non-negative and not the same as receiver id
-    receiverID: BigInteger that is non-negative and not the same as sender id
+    senderID: BigInteger that is non-negative and not the same as receiverID
+    receiverID: BigInteger that is non-negative and not the same as senderID
     amount: BigDecimal that is greater than zero
   }
   
