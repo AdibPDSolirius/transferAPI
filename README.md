@@ -1,6 +1,6 @@
 <h2>transferAPI</h2>
 
-Post to https://localhost:8080/transfer
+Post to http://localhost:8080/transfer
 <br><br>
 Payload: 
 <pre>
