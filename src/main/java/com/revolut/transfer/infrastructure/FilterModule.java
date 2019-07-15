@@ -12,6 +12,7 @@ public class FilterModule extends AbstractModule {
     public void configure() {
         Multibinder<TransferValidator> transferValidatorMultibinder =
                 Multibinder.newSetBinder(binder(), TransferValidator.class);
+
         transferValidatorMultibinder.addBinding().to(AccountIDValidator.class);
         transferValidatorMultibinder.addBinding().to(AmountValidator.class);
     }

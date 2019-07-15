@@ -19,21 +19,27 @@ public class AmountValidatorTest {
     @Test
     public void shouldReturnTrueWhenAmountGreaterThanZero() {
         TransferDTO transferDTO = new TransferDTO(BigDecimal.TEN, BigInteger.ZERO, BigInteger.ONE);
+
         boolean isPass = amountValidator.validate(transferDTO);
+
         assertTrue(isPass);
     }
 
     @Test
     public void shouldReturnFalseWhenAmountEqualsZero() {
         TransferDTO transferDTO = new TransferDTO(BigDecimal.ZERO, BigInteger.ZERO, BigInteger.ONE);
+
         boolean isPass = amountValidator.validate(transferDTO);
+
         assertFalse(isPass);
     }
 
     @Test
     public void shouldReturnFalseWhenAmountLessThanZero() {
         TransferDTO transferDTO = new TransferDTO(BigDecimal.valueOf(-50), BigInteger.ZERO, BigInteger.ONE);
+
         boolean isPass = amountValidator.validate(transferDTO);
+
         assertFalse(isPass);
     }
 }

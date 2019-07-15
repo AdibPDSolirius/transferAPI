@@ -67,17 +67,21 @@ public class FilterTest {
 
     private String getValidMockTransferPayload() {
         final JsonObject jsonObject = new JsonObject();
+
         jsonObject.addProperty("senderID", "1");
         jsonObject.addProperty("receiverID", "2");
         jsonObject.addProperty("amount", "10");
+
         return  jsonObject.toString();
     }
 
     private String getMockTransferPayloadWithNegativeAmount() {
         final JsonObject jsonObject = new JsonObject();
+
         jsonObject.addProperty("senderID", "1");
         jsonObject.addProperty("receiverID", "2");
         jsonObject.addProperty("amount", "-10");
+
         return  jsonObject.toString();
     }
 

@@ -15,9 +15,11 @@ class Database {
 
     AccountBalance getAccountBalance(final BigInteger id) {
         final AccountBalance accountBalance = accounts.get(id);
+
         if(accountBalance == null) {
             return null;
         }
+
         return new AccountBalance(accountBalance.getId(), accountBalance.getBalance());
     }
 

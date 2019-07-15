@@ -41,22 +41,28 @@ public class ThreadHandlerTest {
 
     private List<Thread> getThreadList() {
         final List<Thread> threadList = new ArrayList<>();
+
         threadList.addAll(getThreadsThatManageAccountIDs(accountID1, accountID2, THREAD_COUNT / 2));
         threadList.addAll(getThreadsThatManageAccountIDs(accountID2, accountID1, THREAD_COUNT / 2));
+
         return threadList;
     }
 
     private List<Thread> getThreadsThatManageAccountIDs(final BigInteger account1, final BigInteger account2, final int noThreads) {
         final List<Thread> threadList = new ArrayList<>(noThreads);
+
         for (int i = 0; i < noThreads; i++) {
             threadList.add(new Thread(() -> threadHandler.manageThreads(account1, account2, () -> counter++)));
         }
+
         return threadList;
     }
 
     private void runThreads(final List<Thread> threadList) {
         final ExecutorService service = Executors.newFixedThreadPool(THREAD_COUNT);
+
         threadList.forEach(service::submit);
+
         service.shutdown();
         try {
             service.awaitTermination(5, TimeUnit.SECONDS);

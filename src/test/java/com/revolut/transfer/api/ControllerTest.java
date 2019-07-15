@@ -61,9 +61,11 @@ public class ControllerTest {
 
     private String getMockTransferPayload() {
         JsonObject jsonObject = new JsonObject();
+
         jsonObject.addProperty("senderID", "0");
         jsonObject.addProperty("receiverID", "1");
         jsonObject.addProperty("amount", "2");
+
         return  jsonObject.toString();
     }
 }

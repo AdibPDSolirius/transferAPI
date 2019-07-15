@@ -170,9 +170,11 @@ public class TransferIT {
 
     private String getRequestBody(final BigInteger senderId, final BigInteger receiverId, final BigDecimal amount) {
         final JsonObject jsonObject = new JsonObject();
+
         jsonObject.addProperty("senderID", senderId);
         jsonObject.addProperty("receiverID", receiverId);
         jsonObject.addProperty("amount", amount);
+
         return  jsonObject.toString();
     }
 }
