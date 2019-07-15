@@ -47,7 +47,6 @@ public class HandlerTest {
         when(accountBalanceService.transfer(any(TransferDTO.class))).thenReturn(mockResponseParameters);
         when(request.body()).thenReturn(getMockTransferPayload());
 
-
         final String responseJSON = handler.processTransferRequest(request, response);
 
         assertEquals(new Gson().toJson(mockResponseParameters.getResponseDTO()), responseJSON);

@@ -10,7 +10,7 @@ import com.google.inject.Injector;
 import com.revolut.transfer.api.Router;
 import com.revolut.transfer.data.AccountBalanceRepository;
 import com.revolut.transfer.domain.AccountBalance;
-import com.revolut.transfer.infrastructure.HandlerModule;
+import com.revolut.transfer.infrastructure.FilterModule;
 
 
 public class Application {
@@ -20,7 +20,7 @@ public class Application {
     public static void main(String[] args) {
         port(PORT);
 
-        final Injector injector = Guice.createInjector(new HandlerModule());
+        final Injector injector = Guice.createInjector(new FilterModule());
 
         initialiseDatabase(injector.getInstance(AccountBalanceRepository.class));
 

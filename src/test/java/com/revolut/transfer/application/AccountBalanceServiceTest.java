@@ -1,6 +1,8 @@
 package com.revolut.transfer.application;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
@@ -10,6 +12,7 @@ import com.revolut.transfer.api.request.TransferDTO;
 import com.revolut.transfer.api.response.ResponseMessage;
 import com.revolut.transfer.api.response.ResponseParameters;
 import com.revolut.transfer.api.response.ResponseStatus;
+import com.revolut.transfer.application.AccountBalanceService;
 import com.revolut.transfer.data.AccountBalanceRepository;
 import com.revolut.transfer.domain.AccountBalance;
 import org.eclipse.jetty.http.HttpStatus;
@@ -23,13 +26,16 @@ import org.mockito.junit.MockitoJUnitRunner;
 public class AccountBalanceServiceTest {
 
     @InjectMocks
-    private AccountBalanceService transferService;
+    private AccountBalanceService accountBalanceService;
 
     @Mock
-    private AccountBalanceRepository transferRepository;
+    private AccountBalanceRepository accountBalanceRepository;
 
     @Mock
-    private AccountBalance accountBalance;
+    private AccountBalance accountBalanceSender;
+
+    @Mock
+    private AccountBalance accountBalanceReceiver;
 
     private static final BigDecimal AMOUNT_IN_ACCOUNT = BigDecimal.TEN;
 
@@ -39,55 +45,64 @@ public class AccountBalanceServiceTest {
     private static final TransferDTO TRANSFER_DTO = new TransferDTO(AMOUNT_IN_ACCOUNT, SENDER_ID, RECEIVER_ID);
 
     @Test
-    public void shouldReturnSenderAccountNotFoundResponseWhenSenderAccountIsNull() {
-        when(transferRepository.findAccountBalanceByID(SENDER_ID)).thenReturn(null);
+    public void shouldReturnSenderAccountNotFoundAndDatabaseNotUpdatedResponseWhenSenderAccountIsNull() {
+        when(accountBalanceRepository.findAccountBalanceByID(SENDER_ID)).thenReturn(null);
 
-        final ResponseParameters responseParameters = transferService.transfer(TRANSFER_DTO);
+        final ResponseParameters responseParameters = accountBalanceService.transfer(TRANSFER_DTO);
 
         assertEquals(HttpStatus.UNPROCESSABLE_ENTITY_422, responseParameters.getHttpStatus());
         assertEquals(ResponseStatus.FAILURE.getResponseStatus(), responseParameters.getResponseDTO().getStatus());
         assertEquals(ResponseMessage.SENDER_ACCOUNT_NOT_FOUND.getResponseMessage(), responseParameters.getResponseDTO().getMessage());
 
+        verifyDBCalls(0);
     }
 
     @Test
-    public void shouldReturnReceiverAccountNotFoundResponseWhenReceiverAccountIsNull() {
-        when(transferRepository.findAccountBalanceByID(RECEIVER_ID)).thenReturn(null);
-        when(transferRepository.findAccountBalanceByID(SENDER_ID)).thenReturn(accountBalance);
+    public void shouldReturnReceiverAccountNotFoundAndDatabaseNotUpdatedResponseWhenReceiverAccountIsNull() {
+        when(accountBalanceRepository.findAccountBalanceByID(SENDER_ID)).thenReturn(accountBalanceSender);
+        when(accountBalanceRepository.findAccountBalanceByID(RECEIVER_ID)).thenReturn(null);
 
-        final ResponseParameters responseParameters = transferService.transfer(TRANSFER_DTO);
+        final ResponseParameters responseParameters = accountBalanceService.transfer(TRANSFER_DTO);
 
         assertEquals(HttpStatus.UNPROCESSABLE_ENTITY_422, responseParameters.getHttpStatus());
         assertEquals(ResponseStatus.FAILURE.getResponseStatus(), responseParameters.getResponseDTO().getStatus());
         assertEquals(ResponseMessage.RECEIVER_ACCOUNT_NOT_FOUND.getResponseMessage(), responseParameters.getResponseDTO().getMessage());
 
+        verifyDBCalls(0);
     }
 
     @Test
-    public void shouldReturnInsufficientFundsResponseWhenTransferFailed() {
-        when(transferRepository.findAccountBalanceByID(RECEIVER_ID)).thenReturn(accountBalance);
-        when(transferRepository.findAccountBalanceByID(SENDER_ID)).thenReturn(accountBalance);
-        when(accountBalance.transferTo(accountBalance, TRANSFER_DTO.getAmount())).thenReturn(false);
+    public void shouldReturnInsufficientFundsAndDatabaseNotUpdatedResponseWhenTransferFailed() {
+        when(accountBalanceRepository.findAccountBalanceByID(SENDER_ID)).thenReturn(accountBalanceSender);
+        when(accountBalanceRepository.findAccountBalanceByID(RECEIVER_ID)).thenReturn(accountBalanceReceiver);
+        when(accountBalanceSender.transferTo(accountBalanceReceiver, TRANSFER_DTO.getAmount())).thenReturn(false);
 
-        final ResponseParameters responseParameters = transferService.transfer(TRANSFER_DTO);
+        final ResponseParameters responseParameters = accountBalanceService.transfer(TRANSFER_DTO);
 
         assertEquals(HttpStatus.CONFLICT_409, responseParameters.getHttpStatus());
         assertEquals(ResponseStatus.FAILURE.getResponseStatus(), responseParameters.getResponseDTO().getStatus());
         assertEquals(ResponseMessage.INSUFFICIENT_FUNDS.getResponseMessage(), responseParameters.getResponseDTO().getMessage());
 
+        verifyDBCalls(0);
     }
 
     @Test
-    public void shouldReturnSuccessResponseWhenTransferSucceeded() {
-        when(transferRepository.findAccountBalanceByID(RECEIVER_ID)).thenReturn(accountBalance);
-        when(transferRepository.findAccountBalanceByID(SENDER_ID)).thenReturn(accountBalance);
-        when(accountBalance.transferTo(accountBalance, TRANSFER_DTO.getAmount())).thenReturn(true);
+    public void shouldReturnSuccessResponseAndDatabaseUpdatedWhenTransferSucceeded() {
+        when(accountBalanceRepository.findAccountBalanceByID(SENDER_ID)).thenReturn(accountBalanceSender);
+        when(accountBalanceRepository.findAccountBalanceByID(RECEIVER_ID)).thenReturn(accountBalanceReceiver);
+        when(accountBalanceSender.transferTo(accountBalanceReceiver, TRANSFER_DTO.getAmount())).thenReturn(true);
 
-        final ResponseParameters responseParameters = transferService.transfer(TRANSFER_DTO);
+        final ResponseParameters responseParameters = accountBalanceService.transfer(TRANSFER_DTO);
 
         assertEquals(HttpStatus.OK_200, responseParameters.getHttpStatus());
         assertEquals(ResponseStatus.SUCCESS.getResponseStatus(), responseParameters.getResponseDTO().getStatus());
         assertEquals(ResponseMessage.TRANSFER_SUCCESSFUL.getResponseMessage(), responseParameters.getResponseDTO().getMessage());
 
+        verifyDBCalls(1);
+    }
+
+    void verifyDBCalls(final int noCalls) {
+        verify(accountBalanceRepository, times(noCalls)).saveAccountBalance(accountBalanceSender);
+        verify(accountBalanceRepository, times(noCalls)).saveAccountBalance(accountBalanceReceiver);
     }
 }

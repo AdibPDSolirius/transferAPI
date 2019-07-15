@@ -24,7 +24,7 @@ import com.google.inject.Injector;
 import com.revolut.transfer.api.Router;
 import com.revolut.transfer.data.AccountBalanceRepository;
 import com.revolut.transfer.domain.AccountBalance;
-import com.revolut.transfer.infrastructure.HandlerModule;
+import com.revolut.transfer.infrastructure.FilterModule;
 import org.eclipse.jetty.http.HttpStatus;
 import org.junit.After;
 import org.junit.Before;
@@ -51,7 +51,7 @@ public class TransferIT {
     public void setup() {
         port(PORT);
 
-        final Injector injector = Guice.createInjector(new HandlerModule());
+        final Injector injector = Guice.createInjector(new FilterModule());
         accountBalanceRepository = injector.getInstance(AccountBalanceRepository.class);
 
         initialiseDatabase(accountBalanceRepository);
@@ -74,7 +74,7 @@ public class TransferIT {
     }
 
     @Test
-    public void shouldReturn200SuccessfullTransferAndMoneyTransferredWhenValidPayload() {
+    public void shouldReturn200SuccessfulTransferAndMoneyTransferredWhenValidPayload() {
         given().
                 body(getRequestBody(SENDER_ID, RECEIVER_ID, AMOUNT_IN_ACCOUNTS))
                 .with()
@@ -132,7 +132,7 @@ public class TransferIT {
     }
 
     @Test
-    public void shouldReturn422SenderAccountNotFoundAndMoneyNotTransferredWhenSenderAccountNotInDatabase() {
+    public void shouldReturn422SenderAccountNotFoundAndMoneyNotTransferredWhenSenderAccountNotFound() {
         final String fakeSenderId = SENDER_ID + "1";
 
         given().
@@ -152,7 +152,7 @@ public class TransferIT {
     }
 
     @Test
-    public void shouldReturn422ReceiverAccountNotFoundAndMoneyNotTransferredWhenReceiverAccountNotInDatabase() {
+    public void shouldReturn422ReceiverAccountNotFoundAndMoneyNotTransferredWhenReceiverAccountNotFound() {
         final String fakeReceiverId = RECEIVER_ID + "1";
 
         given().

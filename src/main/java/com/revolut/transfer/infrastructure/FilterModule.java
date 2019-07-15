@@ -7,7 +7,7 @@ import com.revolut.transfer.api.validation.AmountValidator;
 import com.revolut.transfer.api.validation.SenderReceiverValidator;
 import com.revolut.transfer.api.validation.TransferValidator;
 
-public class HandlerModule extends AbstractModule {
+public class FilterModule extends AbstractModule {
 
     @Override
     public void configure() {
