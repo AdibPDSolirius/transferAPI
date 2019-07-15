@@ -6,11 +6,11 @@ import com.revolut.transfer.api.request.TransferDTO;
 
 public class AccountIDValidator implements TransferValidator {
 
-    public boolean validate(final TransferDTO transferPOJO) {
-        final boolean notNull = transferPOJO.getSenderID() != null && transferPOJO.getReceiverID() != null;
+    public boolean validate(final TransferDTO transferDTO) {
+        final boolean notNull = transferDTO.getSenderID() != null && transferDTO.getReceiverID() != null;
         if (notNull) {
-            return transferPOJO.getSenderID().compareTo(BigInteger.ZERO) >= 0
-                    && transferPOJO.getReceiverID().compareTo(BigInteger.ZERO) >= 0;
+            return transferDTO.getSenderID().compareTo(BigInteger.ZERO) >= 0
+                    && transferDTO.getReceiverID().compareTo(BigInteger.ZERO) >= 0;
         }
         return false;
     }

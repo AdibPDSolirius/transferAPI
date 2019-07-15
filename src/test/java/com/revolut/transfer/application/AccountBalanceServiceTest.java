@@ -37,17 +37,17 @@ public class AccountBalanceServiceTest {
     private static final BigInteger SENDER_ID = BigInteger.ZERO;
     private static final BigInteger RECEIVER_ID = BigInteger.ONE;
 
-    private static final TransferDTO TRANSFER_POJO = new TransferDTO(AMOUNT_IN_ACCOUNT, SENDER_ID, RECEIVER_ID);
+    private static final TransferDTO TRANSFER_DTO = new TransferDTO(AMOUNT_IN_ACCOUNT, SENDER_ID, RECEIVER_ID);
 
     @Test
     public void shouldReturnSenderAccountNotInDatabaseResponseWhenSenderAccountIsNull() {
         when(transferRepository.findAccountBalanceByID(SENDER_ID)).thenReturn(null);
 
-        final ResponseParameters responseParameters = transferService.transfer(TRANSFER_POJO);
+        final ResponseParameters responseParameters = transferService.transfer(TRANSFER_DTO);
 
         assertEquals(HttpStatus.UNPROCESSABLE_ENTITY_422, responseParameters.getHttpStatus());
-        assertEquals(ResponseStatus.FAILURE.getResponseStatus(), responseParameters.getResponsePOJO().getStatus());
-        assertEquals(ResponseMessage.SENDER_ACCOUNT_NOT_IN_DATABASE.getResponseMessage(), responseParameters.getResponsePOJO().getMessage());
+        assertEquals(ResponseStatus.FAILURE.getResponseStatus(), responseParameters.getResponseDTO().getStatus());
+        assertEquals(ResponseMessage.SENDER_ACCOUNT_NOT_IN_DATABASE.getResponseMessage(), responseParameters.getResponseDTO().getMessage());
 
     }
 
@@ -56,11 +56,11 @@ public class AccountBalanceServiceTest {
         when(transferRepository.findAccountBalanceByID(RECEIVER_ID)).thenReturn(null);
         when(transferRepository.findAccountBalanceByID(SENDER_ID)).thenReturn(accountBalance);
 
-        final ResponseParameters responseParameters = transferService.transfer(TRANSFER_POJO);
+        final ResponseParameters responseParameters = transferService.transfer(TRANSFER_DTO);
 
         assertEquals(HttpStatus.UNPROCESSABLE_ENTITY_422, responseParameters.getHttpStatus());
-        assertEquals(ResponseStatus.FAILURE.getResponseStatus(), responseParameters.getResponsePOJO().getStatus());
-        assertEquals(ResponseMessage.RECEIVER_ACCOUNT_NOT_IN_DATABASE.getResponseMessage(), responseParameters.getResponsePOJO().getMessage());
+        assertEquals(ResponseStatus.FAILURE.getResponseStatus(), responseParameters.getResponseDTO().getStatus());
+        assertEquals(ResponseMessage.RECEIVER_ACCOUNT_NOT_IN_DATABASE.getResponseMessage(), responseParameters.getResponseDTO().getMessage());
 
     }
 
@@ -68,13 +68,13 @@ public class AccountBalanceServiceTest {
     public void shouldReturnInsufficientFundsResponseWhenTransferFailed() {
         when(transferRepository.findAccountBalanceByID(RECEIVER_ID)).thenReturn(accountBalance);
         when(transferRepository.findAccountBalanceByID(SENDER_ID)).thenReturn(accountBalance);
-        when(accountBalance.transferTo(accountBalance, TRANSFER_POJO.getAmount())).thenReturn(false);
+        when(accountBalance.transferTo(accountBalance, TRANSFER_DTO.getAmount())).thenReturn(false);
 
-        final ResponseParameters responseParameters = transferService.transfer(TRANSFER_POJO);
+        final ResponseParameters responseParameters = transferService.transfer(TRANSFER_DTO);
 
         assertEquals(HttpStatus.CONFLICT_409, responseParameters.getHttpStatus());
-        assertEquals(ResponseStatus.FAILURE.getResponseStatus(), responseParameters.getResponsePOJO().getStatus());
-        assertEquals(ResponseMessage.INSUFFICIENT_FUNDS.getResponseMessage(), responseParameters.getResponsePOJO().getMessage());
+        assertEquals(ResponseStatus.FAILURE.getResponseStatus(), responseParameters.getResponseDTO().getStatus());
+        assertEquals(ResponseMessage.INSUFFICIENT_FUNDS.getResponseMessage(), responseParameters.getResponseDTO().getMessage());
 
     }
 
@@ -82,13 +82,13 @@ public class AccountBalanceServiceTest {
     public void shouldReturnSuccessResponseWhenTransferSucceeded() {
         when(transferRepository.findAccountBalanceByID(RECEIVER_ID)).thenReturn(accountBalance);
         when(transferRepository.findAccountBalanceByID(SENDER_ID)).thenReturn(accountBalance);
-        when(accountBalance.transferTo(accountBalance, TRANSFER_POJO.getAmount())).thenReturn(true);
+        when(accountBalance.transferTo(accountBalance, TRANSFER_DTO.getAmount())).thenReturn(true);
 
-        final ResponseParameters responseParameters = transferService.transfer(TRANSFER_POJO);
+        final ResponseParameters responseParameters = transferService.transfer(TRANSFER_DTO);
 
         assertEquals(HttpStatus.OK_200, responseParameters.getHttpStatus());
-        assertEquals(ResponseStatus.SUCCESS.getResponseStatus(), responseParameters.getResponsePOJO().getStatus());
-        assertEquals(ResponseMessage.TRANSFER_SUCCESSFUL.getResponseMessage(), responseParameters.getResponsePOJO().getMessage());
+        assertEquals(ResponseStatus.SUCCESS.getResponseStatus(), responseParameters.getResponseDTO().getStatus());
+        assertEquals(ResponseMessage.TRANSFER_SUCCESSFUL.getResponseMessage(), responseParameters.getResponseDTO().getMessage());
 
     }
 }

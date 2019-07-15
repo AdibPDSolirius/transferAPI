@@ -16,22 +16,22 @@ public class AmountValidatorTest {
 
     @Test
     public void shouldReturnTrueWhenAmountGreaterThanZero() {
-        TransferDTO transferPOJO = new TransferDTO(BigDecimal.TEN, BigInteger.ZERO, BigInteger.ONE);
-        boolean isPass = new AmountValidator().validate(transferPOJO);
+        TransferDTO transferDTO = new TransferDTO(BigDecimal.TEN, BigInteger.ZERO, BigInteger.ONE);
+        boolean isPass = new AmountValidator().validate(transferDTO);
         assertTrue(isPass);
     }
 
     @Test
     public void shouldReturnFalseWhenAmountEqualsZero() {
-        TransferDTO transferPOJO = new TransferDTO(BigDecimal.ZERO, BigInteger.ZERO, BigInteger.ONE);
-        boolean isPass = new AmountValidator().validate(transferPOJO);
+        TransferDTO transferDTO = new TransferDTO(BigDecimal.ZERO, BigInteger.ZERO, BigInteger.ONE);
+        boolean isPass = new AmountValidator().validate(transferDTO);
         assertFalse(isPass);
     }
 
     @Test
     public void shouldReturnFalseWhenAmountLessThanZero() {
-        TransferDTO transferPOJO = new TransferDTO(BigDecimal.valueOf(-50), BigInteger.ZERO, BigInteger.ONE);
-        boolean isPass = new AmountValidator().validate(transferPOJO);
+        TransferDTO transferDTO = new TransferDTO(BigDecimal.valueOf(-50), BigInteger.ZERO, BigInteger.ONE);
+        boolean isPass = new AmountValidator().validate(transferDTO);
         assertFalse(isPass);
     }
 }

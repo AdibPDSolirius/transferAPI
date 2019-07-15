@@ -4,5 +4,5 @@ import com.revolut.transfer.api.request.TransferDTO;
 
 public interface TransferValidator {
 
-    boolean validate(final TransferDTO transferPOJO);
+    boolean validate(final TransferDTO transferDTO);
 }

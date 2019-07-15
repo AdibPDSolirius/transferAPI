@@ -50,7 +50,7 @@ public class HandlerTest {
 
         final String responseJSON = handler.processTransferRequest(request, response);
 
-        assertEquals(new Gson().toJson(mockResponseParameters.getResponsePOJO()), responseJSON);
+        assertEquals(new Gson().toJson(mockResponseParameters.getResponseDTO()), responseJSON);
 
 
     }

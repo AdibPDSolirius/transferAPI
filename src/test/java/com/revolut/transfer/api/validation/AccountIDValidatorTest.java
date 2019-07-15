@@ -16,36 +16,36 @@ public class AccountIDValidatorTest {
 
     @Test
     public void shouldReturnTrueWhenSenderIDAndReceiverIDNotNullAndNotNegative() {
-        TransferDTO transferPOJO = new TransferDTO(BigDecimal.TEN, BigInteger.ZERO, BigInteger.ONE);
-        boolean isPass = new AccountIDValidator().validate(transferPOJO);
+        TransferDTO transferDTO = new TransferDTO(BigDecimal.TEN, BigInteger.ZERO, BigInteger.ONE);
+        boolean isPass = new AccountIDValidator().validate(transferDTO);
         assertTrue(isPass);
     }
 
     @Test
     public void shouldReturnFalseWhenSenderAndReceiverIDNotNullAndSenderIDNegative() {
-        TransferDTO transferPOJO = new TransferDTO(BigDecimal.TEN, BigInteger.valueOf(-1), BigInteger.ONE);
-        boolean isPass = new AccountIDValidator().validate(transferPOJO);
+        TransferDTO transferDTO = new TransferDTO(BigDecimal.TEN, BigInteger.valueOf(-1), BigInteger.ONE);
+        boolean isPass = new AccountIDValidator().validate(transferDTO);
         assertFalse(isPass);
     }
 
     @Test
     public void shouldReturnFalseWhenSenderAndReceiverIDNotNullAndReceiverIDNegative() {
-        TransferDTO transferPOJO = new TransferDTO(BigDecimal.TEN, BigInteger.ZERO, BigInteger.valueOf(-2));
-        boolean isPass = new AccountIDValidator().validate(transferPOJO);
+        TransferDTO transferDTO = new TransferDTO(BigDecimal.TEN, BigInteger.ZERO, BigInteger.valueOf(-2));
+        boolean isPass = new AccountIDValidator().validate(transferDTO);
         assertFalse(isPass);
     }
 
     @Test
     public void shouldReturnFalseWhenSenderIDNull() {
-        TransferDTO transferPOJO = new TransferDTO(BigDecimal.TEN, null, BigInteger.ONE);
-        boolean isPass = new AccountIDValidator().validate(transferPOJO);
+        TransferDTO transferDTO = new TransferDTO(BigDecimal.TEN, null, BigInteger.ONE);
+        boolean isPass = new AccountIDValidator().validate(transferDTO);
         assertFalse(isPass);
     }
 
     @Test
     public void shouldReturnFalseWhenReceiverIDNull() {
-        TransferDTO transferPOJO = new TransferDTO(BigDecimal.TEN, BigInteger.ZERO,null);
-        boolean isPass = new AccountIDValidator().validate(transferPOJO);
+        TransferDTO transferDTO = new TransferDTO(BigDecimal.TEN, BigInteger.ZERO,null);
+        boolean isPass = new AccountIDValidator().validate(transferDTO);
         assertFalse(isPass);
     }
 }

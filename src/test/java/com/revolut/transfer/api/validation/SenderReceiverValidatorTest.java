@@ -16,15 +16,15 @@ public class SenderReceiverValidatorTest {
 
     @Test
     public void shouldReturnTrueWhenSenderIsNotReceiver() {
-        TransferDTO transferPOJO = new TransferDTO(BigDecimal.TEN, BigInteger.ZERO, BigInteger.ONE);
-        boolean isPass = new SenderReceiverValidator().validate(transferPOJO);
+        TransferDTO transferDTO = new TransferDTO(BigDecimal.TEN, BigInteger.ZERO, BigInteger.ONE);
+        boolean isPass = new SenderReceiverValidator().validate(transferDTO);
         assertTrue(isPass);
     }
 
     @Test
     public void shouldReturnFalseWhenSenderIsReceiver() {
-        TransferDTO transferPOJO = new TransferDTO(BigDecimal.ZERO, BigInteger.ZERO, BigInteger.ZERO);
-        boolean isPass = new SenderReceiverValidator().validate(transferPOJO);
+        TransferDTO transferDTO = new TransferDTO(BigDecimal.ZERO, BigInteger.ZERO, BigInteger.ZERO);
+        boolean isPass = new SenderReceiverValidator().validate(transferDTO);
         assertFalse(isPass);
     }
 

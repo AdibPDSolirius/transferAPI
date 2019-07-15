@@ -25,14 +25,14 @@ public class Filter {
     }
 
     void validateRequest(final Request request, final Response response) {
-        final TransferDTO transferPOJO = convertToTransferPOJO(request.body());
+        final TransferDTO transferDTO = convertToTransferDTO(request.body());
 
-        if (transferPOJO == null || !isPassedValidation(transferPOJO)) {
+        if (transferDTO == null || !isPassedValidation(transferDTO)) {
             halt(HttpStatus.BAD_REQUEST_400);
         }
     }
 
-    private TransferDTO convertToTransferPOJO(final String tranferJSON) {
+    private TransferDTO convertToTransferDTO(final String tranferJSON) {
         try {
             return gson.fromJson(tranferJSON, TransferDTO.class);
         } catch (Exception e) {
@@ -40,8 +40,8 @@ public class Filter {
         }
     }
 
-    private boolean isPassedValidation(final TransferDTO transferPOJO) {
-        return transferValidators.stream().allMatch(transferValidator -> transferValidator.validate(transferPOJO));
+    private boolean isPassedValidation(final TransferDTO transferDTO) {
+        return transferValidators.stream().allMatch(transferValidator -> transferValidator.validate(transferDTO));
     }
 
 }

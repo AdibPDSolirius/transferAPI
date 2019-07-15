@@ -3,22 +3,22 @@ package com.revolut.transfer.api.response;
 public class ResponseParameters {
 
     private int httpStatus;
-    private ResponseDTO responsePOJO;
+    private ResponseDTO responseDTO;
 
     private String status;
     private String message;
 
-    public ResponseParameters(int httpStatus, ResponseDTO responsePOJO) {
+    public ResponseParameters(int httpStatus, ResponseDTO responseDTO) {
         this.httpStatus = httpStatus;
-        this.responsePOJO = responsePOJO;
+        this.responseDTO = responseDTO;
     }
 
     public int getHttpStatus() {
         return this.httpStatus;
     }
 
-    public ResponseDTO getResponsePOJO() {
-        return this.responsePOJO;
+    public ResponseDTO getResponseDTO() {
+        return this.responseDTO;
     }
 
 }

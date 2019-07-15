@@ -28,14 +28,14 @@ public class Handler {
     }
 
     String processTransferRequest(final Request request, final Response response) {
-        final TransferDTO transferPOJO = gson.fromJson(request.body(), TransferDTO.class);
+        final TransferDTO transferDTO = gson.fromJson(request.body(), TransferDTO.class);
 
-        threadHandler.manageThreads(transferPOJO.getSenderID(), transferPOJO.getReceiverID(),
-                () -> responseParameters = accountBalanceService.transfer(transferPOJO));
+        threadHandler.manageThreads(transferDTO.getSenderID(), transferDTO.getReceiverID(),
+                () -> responseParameters = accountBalanceService.transfer(transferDTO));
 
         response.header("Content-Type", "application/json");
         response.status(responseParameters.getHttpStatus());
 
-        return gson.toJson(responseParameters.getResponsePOJO());
+        return gson.toJson(responseParameters.getResponseDTO());
     }
 }

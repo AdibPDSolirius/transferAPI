@@ -16,21 +16,21 @@ public class AccountBalanceService {
     @Inject
     private AccountBalanceRepository accountBalanceRepository;
 
-    public ResponseParameters transfer(final TransferDTO transferPOJO) {
+    public ResponseParameters transfer(final TransferDTO transferDTO) {
 
-        final AccountBalance sender = accountBalanceRepository.findAccountBalanceByID(transferPOJO.getSenderID());
+        final AccountBalance sender = accountBalanceRepository.findAccountBalanceByID(transferDTO.getSenderID());
         if(sender == null) {
             return new ResponseParameters(HttpStatus.UNPROCESSABLE_ENTITY_422,
                     new ResponseDTO(ResponseStatus.FAILURE, ResponseMessage.SENDER_ACCOUNT_NOT_IN_DATABASE));
         }
 
-        final AccountBalance receiver = accountBalanceRepository.findAccountBalanceByID(transferPOJO.getReceiverID());
+        final AccountBalance receiver = accountBalanceRepository.findAccountBalanceByID(transferDTO.getReceiverID());
         if(receiver == null) {
             return new ResponseParameters(HttpStatus.UNPROCESSABLE_ENTITY_422,
                     new ResponseDTO(ResponseStatus.FAILURE, ResponseMessage.RECEIVER_ACCOUNT_NOT_IN_DATABASE));
         }
 
-        final boolean isSuccess = sender.transferTo(receiver, transferPOJO.getAmount());
+        final boolean isSuccess = sender.transferTo(receiver, transferDTO.getAmount());
 
         if(isSuccess) {
             accountBalanceRepository.saveAccountBalance(sender);
