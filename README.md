@@ -1,6 +1,6 @@
 <h2>transferAPI</h2>
 
-Post to https://localhost:8080/transfer
+Post to http://localhost:8080/transfer
 <br><br>
 Payload: 
 <pre>
@@ -40,16 +40,15 @@ Response:
 Database initialised with two accounts
 <pre>
   Account A: 
-    ID: 1
+    ID: 0
     Balance: 100
    
   Account B:
-    ID: 2
+    ID: 1
     Balance: 100
 </pre>
 
 Design and Flow
 
-
-PAYLOAD --> PAYLOAD VALIDATION (Returns 400) --> API --> HANDLER --> SERVICE (Retrieves accounts from repo) --> ACCOUNT
+![Imgur Image](https://i.imgur.com/vLIpq1C.jpg)
 
