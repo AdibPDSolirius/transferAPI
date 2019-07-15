@@ -50,5 +50,5 @@ Database initialised with two accounts
 
 Design and Flow
 
-![Imgur Image](https://i.imgur.com/dAsBn5W.jpg)
+![Imgur Image](https://i.imgur.com/vLIpq1C.jpg)
 
