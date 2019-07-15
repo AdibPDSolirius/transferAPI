@@ -6,10 +6,12 @@ Payload:
 <pre>
   Schema
   { 
-    senderId: BigInteger,
-    receiverId: BigInteger,
-    amountId: BigDecimal
+    senderId: BigInteger that is not less than zero and not the same as receiver id
+    receiverId: BigInteger that is not less than zero and not the same as sender id
+    amountId: BigDecimal that is greater than zero
   }
+  
+  Will return 400 status if schema is violated
   
   Example
   {
@@ -17,6 +19,8 @@ Payload:
     receiverId: 2,
     amountId: 50
   }
+  
+  
 </pre>
 
 Response:
@@ -45,4 +49,7 @@ Database initialised with two accounts
 </pre>
 
 Design and Flow
+
+
+PAYLOAD --> PAYLOAD VALIDATION (Returns 400) --> API --> HANDLER --> SERVICE (Retrieves accounts from repo) --> ACCOUNT
 
