@@ -1,14 +1,34 @@
-transferAPI
+<h2>transferAPI</h2>
 
-URI: https://localhost:8080/transfer
-Payload:
-{
-  senderId: 1,
-  receiverId: 1,
-  amountId: 10
-}
+Post to https://localhost:8080/transfer
+<br><br>
+Payload: 
+<pre>
+  Schema
+  { 
+    senderId: BigInteger,
+    receiverId: BigInteger,
+    amountId: BigDecimal
+  }
+  
+  Example
+  {
+    senderId: 1,
+    receiverId: 2,
+    amountId: 50
+  }
+</pre>
 
-Database initialised with two accounts, 
+Database initialised with two accounts
+<pre>
+  Account A: 
+    ID: 1
+    Balance: 100
+   
+  Account B:
+    ID: 2
+    Balance: 100
+</pre>
 1: 100
 2: 100
 
