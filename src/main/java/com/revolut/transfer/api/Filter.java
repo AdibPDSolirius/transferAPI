@@ -28,7 +28,7 @@ public class Filter {
         final TransferDTO transferDTO = convertToTransferDTO(request.body());
 
         if (transferDTO == null || !isPassedValidation(transferDTO)) {
-            halt(HttpStatus.BAD_REQUEST_400);
+            halt(HttpStatus.BAD_REQUEST_400, "Payload validation failed");
         }
     }
 
