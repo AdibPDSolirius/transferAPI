@@ -50,6 +50,5 @@ Database initialised with two accounts
 
 Design and Flow
 
-
-PAYLOAD --> PAYLOAD VALIDATION (Returns 400) --> API --> HANDLER --> SERVICE (Retrieves accounts from repo) --> ACCOUNT
+[Imgur](https://i.imgur.com/dAsBn5W.jpg)
 
