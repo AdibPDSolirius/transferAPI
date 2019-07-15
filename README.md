@@ -19,6 +19,20 @@ Payload:
   }
 </pre>
 
+Response:
+<pre>
+  Schema:
+  {
+    status: String,
+    message: String
+  }
+  
+  Status options: 
+    Success | Failure
+  Message options:
+    Successful Transfer(200) | Insufficient Funds(409) | Sender account not found(422) | Receiver account not found(422)
+</pre>
+
 Database initialised with two accounts
 <pre>
   Account A: 
@@ -29,8 +43,6 @@ Database initialised with two accounts
     ID: 2
     Balance: 100
 </pre>
-1: 100
-2: 100
 
 Design and Flow
 
