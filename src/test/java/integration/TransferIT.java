@@ -37,9 +37,9 @@ public class TransferIT {
 
     private static final String URI = "http://localhost:" + PORT + "/transfer";
 
-    private static final String SENDER_ID = "1";
-    private static final String RECEIVER_ID = "2";
-    private static final String AMOUNT_IN_ACCOUNTS = "100";
+    private static final BigInteger SENDER_ID = BigInteger.ZERO;
+    private static final BigInteger RECEIVER_ID = BigInteger.ONE;
+    private static final BigDecimal AMOUNT_IN_ACCOUNTS = BigDecimal.valueOf(100);
 
     private static final String STATUS_FIELD = "status";
     private static final String MESSAGE_FIELD = "message";
@@ -63,8 +63,8 @@ public class TransferIT {
     }
 
     private void initialiseDatabase(final AccountBalanceRepository accountBalanceRepository) {
-        accountBalanceRepository.saveAccountBalance(new AccountBalance(new BigInteger(SENDER_ID), new BigDecimal(AMOUNT_IN_ACCOUNTS)));
-        accountBalanceRepository.saveAccountBalance(new AccountBalance(new BigInteger(RECEIVER_ID), new BigDecimal(AMOUNT_IN_ACCOUNTS)));
+        accountBalanceRepository.saveAccountBalance(new AccountBalance(SENDER_ID, AMOUNT_IN_ACCOUNTS));
+        accountBalanceRepository.saveAccountBalance(new AccountBalance(RECEIVER_ID, AMOUNT_IN_ACCOUNTS));
     }
 
     @After
@@ -80,29 +80,27 @@ public class TransferIT {
                 .with()
                 .contentType(APPLICATION_JSON).
         when().
-                post(URI).
+                put(URI).
         then().
                 statusCode(HttpStatus.OK_200)
                 .contentType(APPLICATION_JSON)
-                .body(STATUS_FIELD, equalTo(SUCCESS.getResponseStatus()))
+                .body(STATUS_FIELD, equalTo(SUCCESS.getStatus()))
                 .and()
-                .body(MESSAGE_FIELD, equalTo(TRANSFER_SUCCESSFUL.getResponseMessage()));
+                .body(MESSAGE_FIELD, equalTo(TRANSFER_SUCCESSFUL.getMessage()));
 
-        assertEquals(BigDecimal.ZERO, accountBalanceRepository.findAccountBalanceByID(BigInteger.valueOf(Long.parseLong(SENDER_ID))).getBalance());
-        assertEquals(BigDecimal.valueOf(Long.parseLong(AMOUNT_IN_ACCOUNTS) + Long.parseLong(AMOUNT_IN_ACCOUNTS)), accountBalanceRepository.findAccountBalanceByID(BigInteger.valueOf(Long.parseLong(RECEIVER_ID))).getBalance());
+        assertEquals(BigDecimal.ZERO, accountBalanceRepository.findAccountBalanceByID(SENDER_ID).getBalance());
+        assertEquals(AMOUNT_IN_ACCOUNTS.add(AMOUNT_IN_ACCOUNTS), accountBalanceRepository.findAccountBalanceByID(RECEIVER_ID).getBalance());
 
     }
 
     @Test
     public void shouldReturn400BadRequestAndMoneyNotTransferredWhenInvalidPayload() {
-        final String invalidReceiverID = "-" + RECEIVER_ID;
-
         given().
-                body(getRequestBody(SENDER_ID, invalidReceiverID, AMOUNT_IN_ACCOUNTS))
+                body(getRequestBody(SENDER_ID, BigInteger.valueOf(-1), AMOUNT_IN_ACCOUNTS))
                 .with()
                 .contentType(APPLICATION_JSON).
         when().
-                post(URI).
+                put(URI).
         then().
                 statusCode(HttpStatus.BAD_REQUEST_400);
 
@@ -112,20 +110,18 @@ public class TransferIT {
 
     @Test
     public void shouldReturn409InsufficientFundsAndMoneyNotTransferredWhenInsufficientAmountInSenderAccount() {
-        final String tooMuchAmount = AMOUNT_IN_ACCOUNTS + "1";
-
         given().
-                body(getRequestBody(SENDER_ID, RECEIVER_ID, tooMuchAmount))
+                body(getRequestBody(SENDER_ID, RECEIVER_ID, AMOUNT_IN_ACCOUNTS.add(AMOUNT_IN_ACCOUNTS)))
                 .with()
                 .contentType(APPLICATION_JSON).
         when().
-                post(URI).
+                put(URI).
         then().
                 statusCode(HttpStatus.CONFLICT_409)
                 .contentType(APPLICATION_JSON)
-                .body(STATUS_FIELD, equalTo(FAILURE.getResponseStatus()))
+                .body(STATUS_FIELD, equalTo(FAILURE.getStatus()))
                 .and()
-                .body(MESSAGE_FIELD, equalTo(INSUFFICIENT_FUNDS.getResponseMessage()));
+                .body(MESSAGE_FIELD, equalTo(INSUFFICIENT_FUNDS.getMessage()));
 
         assertNoBalanceChange();
 
@@ -133,50 +129,46 @@ public class TransferIT {
 
     @Test
     public void shouldReturn422SenderAccountNotFoundAndMoneyNotTransferredWhenSenderAccountNotFound() {
-        final String fakeSenderId = SENDER_ID + "1";
-
         given().
-                body(getRequestBody(fakeSenderId, RECEIVER_ID, AMOUNT_IN_ACCOUNTS))
+                body(getRequestBody(BigInteger.TEN, RECEIVER_ID, AMOUNT_IN_ACCOUNTS))
                 .with()
                 .contentType(APPLICATION_JSON).
         when().
-                post(URI).
+                put(URI).
         then().
                 statusCode(HttpStatus.UNPROCESSABLE_ENTITY_422)
                 .contentType(APPLICATION_JSON)
-                .body(STATUS_FIELD, equalTo(FAILURE.getResponseStatus()))
+                .body(STATUS_FIELD, equalTo(FAILURE.getStatus()))
                 .and()
-                .body(MESSAGE_FIELD, equalTo(SENDER_ACCOUNT_NOT_FOUND.getResponseMessage()));
+                .body(MESSAGE_FIELD, equalTo(SENDER_ACCOUNT_NOT_FOUND.getMessage()));
 
         assertNoBalanceChange();
     }
 
     @Test
     public void shouldReturn422ReceiverAccountNotFoundAndMoneyNotTransferredWhenReceiverAccountNotFound() {
-        final String fakeReceiverId = RECEIVER_ID + "1";
-
         given().
-                body(getRequestBody(SENDER_ID, fakeReceiverId, AMOUNT_IN_ACCOUNTS))
+                body(getRequestBody(SENDER_ID, BigInteger.TEN, AMOUNT_IN_ACCOUNTS))
                 .with()
                 .contentType(APPLICATION_JSON).
         when().
-                post(URI).
+                put(URI).
         then().
                 statusCode(HttpStatus.UNPROCESSABLE_ENTITY_422)
                 .contentType(APPLICATION_JSON)
-                .body(STATUS_FIELD, equalTo(FAILURE.getResponseStatus()))
+                .body(STATUS_FIELD, equalTo(FAILURE.getStatus()))
                 .and()
-                .body(MESSAGE_FIELD, equalTo(RECEIVER_ACCOUNT_NOT_FOUND.getResponseMessage()));
+                .body(MESSAGE_FIELD, equalTo(RECEIVER_ACCOUNT_NOT_FOUND.getMessage()));
 
         assertNoBalanceChange();
     }
 
     private void assertNoBalanceChange() {
-        assertEquals(BigDecimal.valueOf(Long.parseLong(AMOUNT_IN_ACCOUNTS)), accountBalanceRepository.findAccountBalanceByID(BigInteger.valueOf(Long.parseLong(SENDER_ID))).getBalance());
-        assertEquals(BigDecimal.valueOf(Long.parseLong(AMOUNT_IN_ACCOUNTS)), accountBalanceRepository.findAccountBalanceByID(BigInteger.valueOf(Long.parseLong(RECEIVER_ID))).getBalance());
+        assertEquals(AMOUNT_IN_ACCOUNTS, accountBalanceRepository.findAccountBalanceByID(SENDER_ID).getBalance());
+        assertEquals(AMOUNT_IN_ACCOUNTS, accountBalanceRepository.findAccountBalanceByID(RECEIVER_ID).getBalance());
     }
 
-    private String getRequestBody(final String senderId, final String receiverId, final String amount) {
+    private String getRequestBody(final BigInteger senderId, final BigInteger receiverId, final BigDecimal amount) {
         final JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("senderID", senderId);
         jsonObject.addProperty("receiverID", receiverId);

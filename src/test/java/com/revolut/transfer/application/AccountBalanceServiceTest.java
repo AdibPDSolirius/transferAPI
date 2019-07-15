@@ -45,48 +45,6 @@ public class AccountBalanceServiceTest {
     private static final TransferDTO TRANSFER_DTO = new TransferDTO(AMOUNT_IN_ACCOUNT, SENDER_ID, RECEIVER_ID);
 
     @Test
-    public void shouldReturnSenderAccountNotFoundAndDatabaseNotUpdatedResponseWhenSenderAccountIsNull() {
-        when(accountBalanceRepository.findAccountBalanceByID(SENDER_ID)).thenReturn(null);
-
-        final ResponseParameters responseParameters = accountBalanceService.transfer(TRANSFER_DTO);
-
-        assertEquals(HttpStatus.UNPROCESSABLE_ENTITY_422, responseParameters.getHttpStatus());
-        assertEquals(ResponseStatus.FAILURE.getResponseStatus(), responseParameters.getResponseDTO().getStatus());
-        assertEquals(ResponseMessage.SENDER_ACCOUNT_NOT_FOUND.getResponseMessage(), responseParameters.getResponseDTO().getMessage());
-
-        verifyDBCalls(0);
-    }
-
-    @Test
-    public void shouldReturnReceiverAccountNotFoundAndDatabaseNotUpdatedResponseWhenReceiverAccountIsNull() {
-        when(accountBalanceRepository.findAccountBalanceByID(SENDER_ID)).thenReturn(accountBalanceSender);
-        when(accountBalanceRepository.findAccountBalanceByID(RECEIVER_ID)).thenReturn(null);
-
-        final ResponseParameters responseParameters = accountBalanceService.transfer(TRANSFER_DTO);
-
-        assertEquals(HttpStatus.UNPROCESSABLE_ENTITY_422, responseParameters.getHttpStatus());
-        assertEquals(ResponseStatus.FAILURE.getResponseStatus(), responseParameters.getResponseDTO().getStatus());
-        assertEquals(ResponseMessage.RECEIVER_ACCOUNT_NOT_FOUND.getResponseMessage(), responseParameters.getResponseDTO().getMessage());
-
-        verifyDBCalls(0);
-    }
-
-    @Test
-    public void shouldReturnInsufficientFundsAndDatabaseNotUpdatedResponseWhenTransferFailed() {
-        when(accountBalanceRepository.findAccountBalanceByID(SENDER_ID)).thenReturn(accountBalanceSender);
-        when(accountBalanceRepository.findAccountBalanceByID(RECEIVER_ID)).thenReturn(accountBalanceReceiver);
-        when(accountBalanceSender.transferTo(accountBalanceReceiver, TRANSFER_DTO.getAmount())).thenReturn(false);
-
-        final ResponseParameters responseParameters = accountBalanceService.transfer(TRANSFER_DTO);
-
-        assertEquals(HttpStatus.CONFLICT_409, responseParameters.getHttpStatus());
-        assertEquals(ResponseStatus.FAILURE.getResponseStatus(), responseParameters.getResponseDTO().getStatus());
-        assertEquals(ResponseMessage.INSUFFICIENT_FUNDS.getResponseMessage(), responseParameters.getResponseDTO().getMessage());
-
-        verifyDBCalls(0);
-    }
-
-    @Test
     public void shouldReturnSuccessResponseAndDatabaseUpdatedWhenTransferSucceeded() {
         when(accountBalanceRepository.findAccountBalanceByID(SENDER_ID)).thenReturn(accountBalanceSender);
         when(accountBalanceRepository.findAccountBalanceByID(RECEIVER_ID)).thenReturn(accountBalanceReceiver);
@@ -95,10 +53,52 @@ public class AccountBalanceServiceTest {
         final ResponseParameters responseParameters = accountBalanceService.transfer(TRANSFER_DTO);
 
         assertEquals(HttpStatus.OK_200, responseParameters.getHttpStatus());
-        assertEquals(ResponseStatus.SUCCESS.getResponseStatus(), responseParameters.getResponseDTO().getStatus());
-        assertEquals(ResponseMessage.TRANSFER_SUCCESSFUL.getResponseMessage(), responseParameters.getResponseDTO().getMessage());
+        assertEquals(ResponseStatus.SUCCESS.getStatus(), responseParameters.getResponseDTO().getStatus());
+        assertEquals(ResponseMessage.TRANSFER_SUCCESSFUL.getMessage(), responseParameters.getResponseDTO().getMessage());
 
         verifyDBCalls(1);
+    }
+
+    @Test
+    public void shouldReturnSenderAccountNotFoundResponseAndDatabaseNotUpdatedWhenSenderAccountIsNull() {
+        when(accountBalanceRepository.findAccountBalanceByID(SENDER_ID)).thenReturn(null);
+
+        final ResponseParameters responseParameters = accountBalanceService.transfer(TRANSFER_DTO);
+
+        assertEquals(HttpStatus.UNPROCESSABLE_ENTITY_422, responseParameters.getHttpStatus());
+        assertEquals(ResponseStatus.FAILURE.getStatus(), responseParameters.getResponseDTO().getStatus());
+        assertEquals(ResponseMessage.SENDER_ACCOUNT_NOT_FOUND.getMessage(), responseParameters.getResponseDTO().getMessage());
+
+        verifyDBCalls(0);
+    }
+
+    @Test
+    public void shouldReturnReceiverAccountNotFoundResponseAndDatabaseNotUpdatedWhenReceiverAccountIsNull() {
+        when(accountBalanceRepository.findAccountBalanceByID(SENDER_ID)).thenReturn(accountBalanceSender);
+        when(accountBalanceRepository.findAccountBalanceByID(RECEIVER_ID)).thenReturn(null);
+
+        final ResponseParameters responseParameters = accountBalanceService.transfer(TRANSFER_DTO);
+
+        assertEquals(HttpStatus.UNPROCESSABLE_ENTITY_422, responseParameters.getHttpStatus());
+        assertEquals(ResponseStatus.FAILURE.getStatus(), responseParameters.getResponseDTO().getStatus());
+        assertEquals(ResponseMessage.RECEIVER_ACCOUNT_NOT_FOUND.getMessage(), responseParameters.getResponseDTO().getMessage());
+
+        verifyDBCalls(0);
+    }
+
+    @Test
+    public void shouldReturnInsufficientFundsResponseAndDatabaseNotUpdatedWhenTransferFailed() {
+        when(accountBalanceRepository.findAccountBalanceByID(SENDER_ID)).thenReturn(accountBalanceSender);
+        when(accountBalanceRepository.findAccountBalanceByID(RECEIVER_ID)).thenReturn(accountBalanceReceiver);
+        when(accountBalanceSender.transferTo(accountBalanceReceiver, TRANSFER_DTO.getAmount())).thenReturn(false);
+
+        final ResponseParameters responseParameters = accountBalanceService.transfer(TRANSFER_DTO);
+
+        assertEquals(HttpStatus.CONFLICT_409, responseParameters.getHttpStatus());
+        assertEquals(ResponseStatus.FAILURE.getStatus(), responseParameters.getResponseDTO().getStatus());
+        assertEquals(ResponseMessage.INSUFFICIENT_FUNDS.getMessage(), responseParameters.getResponseDTO().getMessage());
+
+        verifyDBCalls(0);
     }
 
     void verifyDBCalls(final int noCalls) {

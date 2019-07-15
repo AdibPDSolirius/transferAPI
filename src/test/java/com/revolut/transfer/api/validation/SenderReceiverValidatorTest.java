@@ -14,17 +14,19 @@ import org.junit.runner.RunWith;
 @RunWith(JUnit4ClassRunner.class)
 public class SenderReceiverValidatorTest {
 
+    private final SenderReceiverValidator senderReceiverValidator = new SenderReceiverValidator();
+
     @Test
     public void shouldReturnTrueWhenSenderIsNotReceiver() {
         TransferDTO transferDTO = new TransferDTO(BigDecimal.TEN, BigInteger.ZERO, BigInteger.ONE);
-        boolean isPass = new SenderReceiverValidator().validate(transferDTO);
+        boolean isPass = senderReceiverValidator.validate(transferDTO);
         assertTrue(isPass);
     }
 
     @Test
     public void shouldReturnFalseWhenSenderIsReceiver() {
-        TransferDTO transferDTO = new TransferDTO(BigDecimal.ZERO, BigInteger.ZERO, BigInteger.ZERO);
-        boolean isPass = new SenderReceiverValidator().validate(transferDTO);
+        TransferDTO transferDTO = new TransferDTO(BigDecimal.TEN, BigInteger.ZERO, BigInteger.ZERO);
+        boolean isPass = senderReceiverValidator.validate(transferDTO);
         assertFalse(isPass);
     }
 

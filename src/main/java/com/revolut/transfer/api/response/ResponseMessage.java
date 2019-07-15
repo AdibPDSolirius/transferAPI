@@ -7,13 +7,13 @@ public enum ResponseMessage {
     RECEIVER_ACCOUNT_NOT_FOUND("Receiver account not found"),
     TRANSFER_SUCCESSFUL("Transfer successful");
 
-    private String responseMessage;
+    private String message;
 
-    ResponseMessage(String responseMessage) {
-        this.responseMessage = responseMessage;
+    ResponseMessage(String message) {
+        this.message = message;
     }
 
-    public String getResponseMessage() {
-        return this.responseMessage;
+    public String getMessage() {
+        return this.message;
     }
 }

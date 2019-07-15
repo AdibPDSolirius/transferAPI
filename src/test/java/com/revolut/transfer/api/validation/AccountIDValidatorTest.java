@@ -14,38 +14,40 @@ import org.junit.runner.RunWith;
 @RunWith(JUnit4ClassRunner.class)
 public class AccountIDValidatorTest {
 
+    private final AccountIDValidator accountIDValidator = new AccountIDValidator();
+
     @Test
-    public void shouldReturnTrueWhenSenderIDAndReceiverIDNotNullAndNotNegative() {
+    public void shouldReturnTrueWhenSenderAndReceiverIDNotNullAndNotNegative() {
         TransferDTO transferDTO = new TransferDTO(BigDecimal.TEN, BigInteger.ZERO, BigInteger.ONE);
-        boolean isPass = new AccountIDValidator().validate(transferDTO);
+        boolean isPass = accountIDValidator.validate(transferDTO);
         assertTrue(isPass);
     }
 
     @Test
     public void shouldReturnFalseWhenSenderAndReceiverIDNotNullAndSenderIDNegative() {
         TransferDTO transferDTO = new TransferDTO(BigDecimal.TEN, BigInteger.valueOf(-1), BigInteger.ONE);
-        boolean isPass = new AccountIDValidator().validate(transferDTO);
+        boolean isPass = accountIDValidator.validate(transferDTO);
         assertFalse(isPass);
     }
 
     @Test
     public void shouldReturnFalseWhenSenderAndReceiverIDNotNullAndReceiverIDNegative() {
         TransferDTO transferDTO = new TransferDTO(BigDecimal.TEN, BigInteger.ZERO, BigInteger.valueOf(-2));
-        boolean isPass = new AccountIDValidator().validate(transferDTO);
+        boolean isPass = accountIDValidator.validate(transferDTO);
         assertFalse(isPass);
     }
 
     @Test
     public void shouldReturnFalseWhenSenderIDNull() {
         TransferDTO transferDTO = new TransferDTO(BigDecimal.TEN, null, BigInteger.ONE);
-        boolean isPass = new AccountIDValidator().validate(transferDTO);
+        boolean isPass = accountIDValidator.validate(transferDTO);
         assertFalse(isPass);
     }
 
     @Test
     public void shouldReturnFalseWhenReceiverIDNull() {
         TransferDTO transferDTO = new TransferDTO(BigDecimal.TEN, BigInteger.ZERO,null);
-        boolean isPass = new AccountIDValidator().validate(transferDTO);
+        boolean isPass = accountIDValidator.validate(transferDTO);
         assertFalse(isPass);
     }
 }

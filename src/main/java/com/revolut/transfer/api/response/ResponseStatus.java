@@ -5,13 +5,13 @@ public enum ResponseStatus {
     SUCCESS("Success"),
     FAILURE("Failure");
 
-    private String responseStatus;
+    private String status;
 
-    ResponseStatus(String responseStatus) {
-        this.responseStatus = responseStatus;
+    ResponseStatus(String status) {
+        this.status = status ;
     }
 
-    public String getResponseStatus() {
-        return this.responseStatus;
+    public String getStatus() {
+        return this.status;
     }
 }

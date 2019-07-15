@@ -5,8 +5,8 @@ public class ResponseDTO {
     private String message;
 
     public ResponseDTO(ResponseStatus responseStatus, ResponseMessage message) {
-        this.status = responseStatus.getResponseStatus();
-        this.message = message.getResponseMessage();
+        this.status = responseStatus.getStatus();
+        this.message = message.getMessage();
     }
 
     public String getStatus() {

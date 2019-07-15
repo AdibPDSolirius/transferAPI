@@ -8,7 +8,7 @@ import com.revolut.transfer.domain.AccountBalance;
 public class AccountBalanceRepository {
 
     @Inject
-    Database database;
+    private Database database;
 
     public AccountBalance findAccountBalanceByID(final BigInteger id) {
         return database.getAccountBalance(id);

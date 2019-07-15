@@ -22,7 +22,7 @@ public class ThreadHandlerTest {
     private ThreadHandler threadHandler;
 
     @Spy
-    private Locks locks;
+    private AccountLocks accountLocks;
 
     private int counter = 0;
     private static final int THREAD_COUNT = 10;

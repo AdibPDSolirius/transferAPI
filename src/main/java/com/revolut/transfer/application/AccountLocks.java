@@ -7,7 +7,7 @@ import java.util.concurrent.ConcurrentMap;
 import javax.inject.Singleton;
 
 @Singleton
-class Locks {
+class AccountLocks {
 
     private final ConcurrentMap<BigInteger, BigInteger> locks = new ConcurrentHashMap<>();
 

@@ -40,7 +40,7 @@ public class FilterTest {
 
     @Before
     public void setup() {
-        TransferValidator transferValidator = new AmountValidator();
+        final TransferValidator transferValidator = new AmountValidator();
         when(transferValidatorSet.stream()).thenReturn(Stream.of(transferValidator));
 
     }

@@ -16,27 +16,27 @@ public class AccountBalanceTest {
 
     @Test
     public void shouldReturnTrueAndMoneyIsTransferredWhenSenderHasEnoughMoney() {
-        final AccountBalance sender = new AccountBalance(BigInteger.ZERO, BigDecimal.valueOf(100));
-        final AccountBalance receiver = new AccountBalance(BigInteger.ZERO, BigDecimal.valueOf(0));
+        final AccountBalance sender = new AccountBalance(BigInteger.ZERO, BigDecimal.TEN);
+        final AccountBalance receiver = new AccountBalance(BigInteger.ZERO, BigDecimal.ZERO);
 
-        final boolean isSuccessful = sender.transferTo(receiver, BigDecimal.valueOf(100));
+        final boolean isSuccessful = sender.transferTo(receiver, BigDecimal.TEN);
 
         assertTrue(isSuccessful);
 
         assertEquals(BigDecimal.ZERO, sender.getBalance());
-        assertEquals(BigDecimal.valueOf(100), receiver.getBalance());
+        assertEquals(BigDecimal.TEN, receiver.getBalance());
     }
 
     @Test
     public void shouldReturnFalseAndMoneyNotTransferredWhenSenderHasNotEnoughMoney() {
-        final AccountBalance sender = new AccountBalance(BigInteger.ZERO, BigDecimal.valueOf(100));
-        final AccountBalance receiver = new AccountBalance(BigInteger.ZERO, BigDecimal.valueOf(0));
+        final AccountBalance sender = new AccountBalance(BigInteger.ZERO, BigDecimal.TEN);
+        final AccountBalance receiver = new AccountBalance(BigInteger.ZERO, BigDecimal.ZERO);
 
-        final boolean isSuccessful = sender.transferTo(receiver, BigDecimal.valueOf(101));
+        final boolean isSuccessful = sender.transferTo(receiver, BigDecimal.valueOf(10.5));
 
         assertFalse(isSuccessful);
 
-        assertEquals(BigDecimal.valueOf(100), sender.getBalance());
+        assertEquals(BigDecimal.TEN, sender.getBalance());
         assertEquals(BigDecimal.ZERO, receiver.getBalance());
 
 
